@@ -1,0 +1,83 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Dashboard_DosenController;
+use App\Http\Controllers\DosenController;
+use App\Http\Controllers\ProdiController;
+use App\Http\Controllers\MatkulController;
+use App\Http\Controllers\KelasController;
+use App\Http\Controllers\MahasiswaController;
+use App\Http\Controllers\AbsensiController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+
+// Authentication Routes
+Auth::routes();
+
+// Redirect root to login
+Route::get('/', function () {
+    if (auth()->check()) {
+        $user = auth()->user();
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.dashboard');
+        } elseif ($user->isDosen()) {
+            return redirect()->route('dashboard_dosen.dashboard');
+        }
+    }
+    return redirect()->route('login');
+});
+
+// Home route (after login)
+Route::get('/home', function() {
+    $user = auth()->user();
+    if ($user->isAdmin()) {
+        return redirect()->route('admin.dashboard');
+    } elseif ($user->isDosen()) {
+        return redirect()->route('dashboard_dosen.dashboard');
+    }
+    return redirect('/');
+})->middleware('auth')->name('home');
+
+// === Admin Routes ===
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/api/dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
+    Route::get('/api/dashboard/chart-data', [DashboardController::class, 'getChartData'])->name('dashboard.chart');
+    
+    // Dosen
+    Route::resource('dosen', DosenController::class)->except(['show']);
+    
+    // Matkul
+    Route::resource('matkul', MatkulController::class)->except(['show']);
+    
+    // Prodi
+    Route::resource('prodi', ProdiController::class)->except(['show']);
+    
+    // Kelas
+    Route::resource('kelas', KelasController::class);
+    
+    // Mahasiswa
+    Route::get('/kelas/{id}/mahasiswa', [MahasiswaController::class, 'index'])->name('mahasiswa');
+    Route::get('/mahasiswa/index', [MahasiswaController::class, 'index'])->name('mahasiswa.index');
+    Route::get('/mahasiswa/create', [MahasiswaController::class, 'create'])->name('mahasiswa.create');
+    Route::post('/mahasiswa', [MahasiswaController::class, 'store'])->name('mahasiswa.store');
+    Route::delete('/mahasiswa/{id}', [MahasiswaController::class, 'destroy'])->name('mahasiswa.destroy');
+    Route::put('/mahasiswa/{id}', [MahasiswaController::class, 'update'])->name('mahasiswa.update');
+    
+    // Absensi
+    Route::get('/absensi', [AbsensiController::class, 'index'])->name('absensi.index');
+    Route::get('/absensi/create', [AbsensiController::class, 'create'])->name('absensi.create');
+    Route::post('/absensi/store', [AbsensiController::class, 'store'])->name('absensi.store');
+    Route::get('/absensi/history', [AbsensiController::class, 'history'])->name('absensi.history');
+});
+
+// === Dosen Routes ===
+Route::prefix('dosen')->middleware(['auth', 'role:dosen'])->group(function () {
+    Route::get('/dashboard', [Dashboard_DosenController::class, 'dashboard'])->name('dashboard_dosen.dashboard');
+    Route::get('/profile', [Dashboard_DosenController::class, 'profile'])->name('dashboard_dosen.profile');
+    Route::post('/profile/update', [Dashboard_DosenController::class, 'updateProfile'])->name('dashboard_dosen.profile.update');
+    Route::get('/absensi', [Dashboard_DosenController::class, 'absensi'])->name('dashboard_dosen.absensi');
+    Route::post('/absensi/export', [Dashboard_DosenController::class, 'exportAbsensi'])->name('dashboard_dosen.absensi.export');
+    Route::get('/api/stats', [Dashboard_DosenController::class, 'getStats'])->name('dashboard_dosen.stats');
+});

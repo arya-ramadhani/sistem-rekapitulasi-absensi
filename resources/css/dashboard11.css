@@ -1,0 +1,358 @@
+Base Layout Styles
+body {
+    overflow-x: hidden;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+#wrapper {
+    display: flex;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    /* Tambahkan transisi untuk animasi smooth */
+    transition: transform 0.3s ease, width 0.3s ease;
+    transform: translateX(0);
+}
+
+.sidebar.collapsed {
+    /* Ganti display:none dengan transform untuk animasi smooth */
+    transform: translateX(-100%);
+    /* Atau alternatif menggunakan width: */
+    /* width: 0;
+    overflow: hidden; */
+}
+
+.sidebar .nav-link {
+    color: #fff;
+}
+
+.sidebar .nav-link:hover {
+    background-color: #495057;
+}
+
+#content {
+    margin-left: 250px; /* untuk memberi ruang sidebar tetap */
+    width: calc(100% - 250px);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    /* Tambahkan transisi untuk content */
+    transition: margin-left 0.3s ease, width 0.3s ease;
+}
+
+/* Ketika sidebar collapsed, content harus menyesuaikan */
+#content.collapsed {
+    margin-left: 0;
+    width: 100%;
+}
+
+/* Tambahan untuk submenu toggle */
+.submenu {
+    transition: all 0.3s ease;
+}
+
+.dropdown-toggle-custom:hover {
+    background-color: #495057;
+    border-radius: 5px;
+}
+
+.submenu li a {
+    font-size: 0.9rem;
+    padding-left: 2rem;
+}
+
+.header {
+    flex-shrink: 0;
+    height: 70px;
+    z-index: 1001;
+}
+
+.container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.logo {
+    width: 40px;
+}
+
+/* Dashboard Specific Styles */
+.welcome-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    height: 140px;
+    display: flex;
+    align-items: center;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--card-color);
+}
+
+.stat-card-green {
+    --card-color: #28a745;
+    border-left: 4px solid #28a745;
+}
+
+.stat-card-red {
+    --card-color: #dc3545;
+    border-left: 4px solid #dc3545;
+}
+
+.stat-card-blue {
+    --card-color: #007bff;
+    border-left: 4px solid #007bff;
+}
+
+.stat-card-orange {
+    --card-color: #fd7e14;
+    border-left: 4px solid #fd7e14;
+}
+
+.stat-card-purple {
+    --card-color: #6f42c1;
+    border-left: 4px solid #6f42c1;
+}
+
+.stat-card-teal {
+    --card-color: #20c997;
+    border-left: 4px solid #20c997;
+}
+
+.stat-card-indigo {
+    --card-color: #6610f2;
+    border-left: 4px solid #6610f2;
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    color: var(--card-color);
+    margin-right: 1rem;
+    width: 60px;
+    text-align: center;
+}
+
+.stat-content {
+    flex: 1;
+}
+
+.stat-number {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0.3rem 0 0 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-sublabel {
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.container-fluid {
+    padding: 2rem;
+}
+
+/* Animation - Updated for 3-3 layout */
+.stat-card {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+/* Baris pertama (3 kartu) */
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+/* Baris kedua (3 kartu) */
+.row:nth-child(3) .stat-card:nth-child(1) { animation-delay: 0.4s; }
+.row:nth-child(3) .stat-card:nth-child(2) { animation-delay: 0.5s; }
+.row:nth-child(3) .stat-card:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design - Updated for 3-3 layout */
+@media (max-width: 768px) {
+    .sidebar {
+        position: absolute;
+        z-index: 1000;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    .sidebar.collapsed {
+        transform: translateX(-100%);
+    }
+
+    #content {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    #content.collapsed {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .container-fluid {
+        padding: 1rem;
+    }
+    
+    .welcome-card {
+        padding: 1.5rem;
+        text-align: center;
+    }
+    
+    .welcome-card h2 {
+        font-size: 1.5rem;
+    }
+    
+    .stat-card {
+        height: auto;
+        min-height: 120px;
+        flex-direction: column;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    .stat-icon {
+        margin-right: 0;
+        margin-bottom: 0.5rem;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+    }
+    
+    /* Mobile: Stack semua kartu secara vertikal */
+    .row .col-lg-4 {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .welcome-card h2 {
+        font-size: 1.2rem;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .stat-label {
+        font-size: 0.8rem;
+    }
+    
+    .stat-sublabel {
+        font-size: 0.7rem;
+    }
+}
+
+/* Chart Container */
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+}
+
+/* Loading States */
+.loading-placeholder {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 8px;
+    height: 20px;
+    margin: 0.5rem 0;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Error States */
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #f5c6cb;
+    margin: 1rem 0;
+}
+
+/* Success States */
+.success-message {
+    background: #d1edda;
+    color: #155724;
+    padding: 1rem;
+    border-radius: 8px;
+    border: 1px solid #c3e6cb;
+    margin: 1rem 0;
+}
