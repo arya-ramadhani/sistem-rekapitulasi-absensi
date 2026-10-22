@@ -21,41 +21,56 @@
             --text: #5a5c69;
         }
 
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #0674c2 0%, #0674c2 50%, #0674c2 100%);
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 24px 16px;
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
+        }
+
+        @media (max-width: 576px) {
+            body {
+                padding: 16px 12px;
+            }
         }
 
         /* Background Segitiga */
         .bg-triangles {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -1;
+            z-index: 0;
             opacity: 0.2;
             background-image: url('{{ asset("images/motif_segitiga_blur.png") }}');
             background-size: 500px;
+            pointer-events: none;
         }
 
         /* Segitiga Mengambang */
         .floating-triangles {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -1;
+            z-index: 0;
             overflow: hidden;
+            pointer-events: none;
         }
 
         .floating-triangles div {
